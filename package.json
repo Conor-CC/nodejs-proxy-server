@@ -1,0 +1,25 @@
+{
+  "name": "nodejs-proxy-server",
+  "version": "1.0.0",
+  "description": "proxy server",
+  "main": "index.js",
+  "scripts": {
+    "start" : "nodemon index.js",
+    "test": "echo \"test\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ConorClery/nodejs-proxy-server.git"
+  },
+  "author": "Conor C",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ConorClery/nodejs-proxy-server/issues"
+  },
+  "homepage": "https://github.com/ConorClery/nodejs-proxy-server#readme",
+  "dependencies" : {
+    "express" : "^4.16.4",
+    "request" : "^2.88.0",
+    "nodemon" : "^1.18.9"
+  }
+}
