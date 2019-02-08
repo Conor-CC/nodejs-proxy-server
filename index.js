@@ -22,38 +22,40 @@ var httpServer = net.createServer(function (socket) {
         //also necessary for maintaining forbidden host list
         clientRequest = parseClientRequest(msg);
 
-        
+
         var isHttps = clientRequest.primary_request.split(" ")
         var address = isHttps[0];
-        if(isHttps = isHttps[1].split(":") !== undefined) {
-          if (isHttps[1] == 443) {
-            console.log("ITS HTTPS HAi");
-
-          }
+        console.log(address);
+        if(address.includes(":443") !== undefined) {
+          console.log("Oh shit its https!!");
         }
 
-        console.log(isHttps);
         //Here, after parsing, decide the request type and
         //console.log('  ** START ** ');
         console.log('<< From client to proxy ', msg.toString());
+        //refresh this socket every connection close to clear cookie data
         var serviceSocket = new net.Socket();
 
 
-        serviceSocket.connect(parseInt(80), REMOTE_ADDR, function () {
-            //console.log('>> From proxy to remote', msg.toString());
+        serviceSocket.connect(parseInt(80), address, function () {
+            console.log('>> From proxy to remote', msg.toString());
             serviceSocket.write(msg);
         });
         serviceSocket.on("data", function (data) {
-            //console.log('<< From remote to proxy', data.toString());
+            console.log('<< From remote to proxy', data.toString());
             socket.write(data);
-            //console.log('>> From proxy to client', data.toString());
+            console.log('>> From proxy to client', data.toString());
         });
         serviceSocket.on("error", function (data) {
             //console.log('<< From remote to proxy', data.toString());
-            console.log(data);
+            //console.log(data);
             //console.log('>> From proxy to client', data.toString());
         });
 
+    });
+
+    socket.on('error', function (msg) {
+      console.log(msg);
     });
 
 });
