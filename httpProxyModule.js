@@ -7,17 +7,17 @@ const httpProxyServer = net.createServer(function (socket) {
 
   const socketErrorHandler = (err) => {
     console.error(err.message);
-    if (serviceSocket) {
+    if (typeof serviceSocket !== "undefined" && serviceSocket) {
       serviceSocket.end();
-    } else if (socket) {
+    } else if (typeof socket !== "undefined" && socket) {
       socket.end();
     }
   }
   const socketCloseHandler = () => {
-    if (serviceSocket) {
+    if (typeof serviceSocket !== "undefined" && serviceSocket) {
+      serviceSocket.end();
+    } else if (typeof socket !== "undefined" && socket) {
       socket.end();
-    } else if (socket) {
-      serverSocket.end();
     }
   }
 
