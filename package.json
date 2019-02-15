@@ -4,7 +4,8 @@
   "description": "proxy server",
   "main": "index.js",
   "scripts": {
-    "start" : "nodemon index.js",
+    "start": "node index.js",
+    "dev" : "nodemon index.js",
     "test": "echo \"test\""
   },
   "repository": {
@@ -18,8 +19,6 @@
   },
   "homepage": "https://github.com/ConorClery/nodejs-proxy-server#readme",
   "dependencies" : {
-    "express" : "^4.16.4",
-    "request" : "^2.88.0",
     "nodemon" : "^1.18.9"
   }
 }
