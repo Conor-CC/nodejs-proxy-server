@@ -1,5 +1,7 @@
 var net = require("net");
 var url = require('url');
+var fs = require('fs');
+var hostCheck = require('./hostChecker.js')
 const remotePort = 80;
 
 
@@ -24,19 +26,29 @@ const httpProxyServer = net.createServer(function (socket) {
   const clientSocketDataHandler = (msg) => {
     const addressString = msg.toString().split(" ");
     const address = url.parse(addressString[1], true);
-    const serviceSocket = net.connect(remotePort, address.host);
-    serviceSocket.on("connect", () => {
-      serviceSocket.write(msg);
-    });
-    serviceSocket.on("error", socketErrorHandler);
-    serviceSocket.on("end", socketCloseHandler);
-    /*
-    The pipe() function reads data from a readable stream as it becomes
-    available and writes it to a destination writable stream."
-    https://nodejs.org/api/stream.html#stream_readable_pipe_destination_options
-    */
-    serviceSocket.pipe(socket, {end: false});
-    socket.pipe(serviceSocket, {end: false});
+    const host = address.host;
+    console.log("REQ HOST: " + host);
+
+    if (hostCheck.checkHostAllowed(host, socket)) {
+      console.log("Allowed!");
+      const serviceSocket = net.connect(remotePort, address.host);
+      serviceSocket.on("connect", () => {
+        serviceSocket.write(msg);
+      });
+      serviceSocket.on("error", socketErrorHandler);
+      serviceSocket.on("end", socketCloseHandler);
+      /*
+      The pipe() function reads data from a readable stream as it becomes
+      available and writes it to a destination writable stream."
+      https://nodejs.org/api/stream.html#stream_readable_pipe_destination_options
+      */
+      serviceSocket.pipe(socket, {end: false});
+      socket.pipe(serviceSocket, {end: false});
+    } else {
+      console.log("nah fam");
+      socket.write("403! No permission to access resource")
+      socket.end();
+    }
   }
   socket.on('data', clientSocketDataHandler);
   socket.on('close', socketCloseHandler);

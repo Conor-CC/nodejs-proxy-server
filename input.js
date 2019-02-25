@@ -7,13 +7,17 @@ const consoleInputHandler = (data) => {
 
   const addForbiddenHost = (err, data) => {
     var json = JSON.parse(data);
-    json.push(args[2] + '":"' + args[2]);
+    console.log(JSON.stringify(json));
+    json.push(args[2]);
     fs.writeFile("forbidden_hosts.json", JSON.stringify(json));
   };
 
   const removeForbiddenHost = (err, data) => {
     var json = JSON.parse(data);
-    var i = json.findIndex(obj => obj.name == args[2]);
+    var i = 0;
+    while (json[i] !== args[2]) {
+      i++;
+    }
     console.log(i);
     json.splice(i, 1);
     console.log(json);
