@@ -5,6 +5,15 @@ const consoleInputHandler = (data) => {
   const input = data.toString().trim();
   const args = input.split(" ");
 
+  const listHosts = (err, data) => {
+    var json = JSON.parse(data);
+    var i = 0;
+    for (i = 0; i < json.length; i++) {
+      console.log(json[i]);
+    }
+    console.log();
+  };
+
   const addForbiddenHost = (err, data) => {
     var json = JSON.parse(data);
     console.log(JSON.stringify(json));
@@ -15,7 +24,7 @@ const consoleInputHandler = (data) => {
   const removeForbiddenHost = (err, data) => {
     var json = JSON.parse(data);
     var i = 0;
-    while (json[i] !== args[2]) {
+    while (json[i] !== args[2] && i < json.length) {
       i++;
     }
     console.log(i);
@@ -31,7 +40,8 @@ const consoleInputHandler = (data) => {
     case "forbidden-hosts":
       switch (args[1]) {
         case "list":
-          process.stdout.write("Listing all forbidden hosts\n");
+          process.stdout.write("Listing all forbidden hosts:\n\n");
+          fs.readFile('forbidden_hosts.json', listHosts)
           break;
         case "add":
           process.stdout.write("Add a forbidden host to list\n");
