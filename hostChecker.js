@@ -9,7 +9,6 @@ function checkHostAllowed(host, socket) {
       console.log(JSON.stringify(json));
       var i = 0;
       for (i = 0; i < json.length; i++) {
-        console.log("hai");
         if (json[i].includes(host)) {
           console.log("Host is forbidden");
 

@@ -18,10 +18,7 @@ const httpProxyServer = net.createServer(function (socket) {
     }
   }
   const socketCloseHandler = () => {
-    console.log("HEEYY");
     if (typeof serviceSocket !== "undefined" && serviceSocket) {
-      console.log("IGJHOAIFJ");
-      cache.pushPage(host, buffer, msg);
       serviceSocket.end();
     } else if (typeof socket !== "undefined" && socket) {
       socket.end();
@@ -40,8 +37,9 @@ const httpProxyServer = net.createServer(function (socket) {
       var check = cache.search(host);
       if (check !== -1) {
         console.log("Writing from cache...");
-        console.log(check);
+        //console.log(check);
         socket.write(check);
+        socket.destroy();
       } else {
         const serviceSocket = net.connect(remotePort, address.host);
         serviceSocket.on("connect", () => {
@@ -59,7 +57,7 @@ const httpProxyServer = net.createServer(function (socket) {
         });
 
         serviceSocket.pipe(socket, {end: false}).on("finish", function () {
-          cache.pushPage(host, buffer, msg)
+          cache.pushPage(host, buffer, msg);
         });
         socket.pipe(serviceSocket, {end: false});
       }

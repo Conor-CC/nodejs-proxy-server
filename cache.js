@@ -8,6 +8,7 @@ function pushPage(host, data, request) {
     cache.shift();
     items--;
   }
+  
   cache.push({host:host, data:data, request:request});
   // console.log(cache);
   items++;
@@ -15,6 +16,7 @@ function pushPage(host, data, request) {
 
 function search(host) {
   var i = 0;
+  console.log(cache);
   while (i < cache.length) {
     if (cache[i] !== undefined && cache[i].host === host) {
       return cache[i].data;
